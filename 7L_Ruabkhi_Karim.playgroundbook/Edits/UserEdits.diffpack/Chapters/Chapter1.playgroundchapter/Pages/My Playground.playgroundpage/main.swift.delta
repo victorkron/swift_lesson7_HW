@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Diff</key>
+	<array>
+		<dict>
+			<key>ModifiedContent</key>
+			<string>struct Person {
+    var age: Int
+    var position: String 
+    var income: Double
+}
+
+enum customError: Error {
+    case noSuchEmployee
+    case submit
+    case noPersons
+}
+
+
+// Задание 1
+class Workers {
+    var staff: Dictionary&lt;String, Person&gt;
+    
+    init?(staff: Dictionary&lt;String, Person&gt;) {
+        self.staff = staff
+    }
+    
+    func ageOf(name: String) -&gt; (Int?, customError?) {
+        guard staff.count &gt; 1 else {
+            return (nil, customError.noPersons)
+        }
+        
+        guard let person = self.staff[name] else {
+            return (nil, customError.noSuchEmployee)
+        }
+        return (person.age, nil)
+    }
+    
+    func incomeOf(name: String) -&gt; (Double?, customError?) {
+        guard staff.count &gt; 1 else {
+            return (nil, customError.noPersons)
+        }
+        
+        guard let person = self.staff[name] else {
+            return (nil, customError.noSuchEmployee)
+        }
+        
+        return (person.income, nil)
+    }
+    
+    deinit {
+        print("deinitializer of Workers")
+    }
+}
+
+var staff: Dictionary&lt;String, Person&gt; = [
+    "Jessica": Person(age: 25, position: "manager", income: 140000.0),
+    "John": Person(age: 24, position: "developer", income: 150000.0),
+    "Hillary": Person(age: 27, position: "accountant", income: 90000.0)
+]
+
+var teamOfWorkers: Workers? = Workers(staff: staff)
+var first = [
+    "age": nil,
+    "income": nil
+] as [String : Any?]
+print("----------Workers-----------")
+print(first)
+first["age"] = teamOfWorkers!.ageOf(name: "Jessica").0
+first["income"] = teamOfWorkers!.incomeOf(name: "Lissa").0
+print(first)
+first["income"] = teamOfWorkers!.incomeOf(name: "Jessica").0
+print(first)
+print("----------------------------")
+teamOfWorkers = nil
+print("\n\n")
+
+
+
+
+// Задание 2
+class Employees {
+    var staff: Dictionary&lt;String, Person&gt;
+    
+    init?(staff: Dictionary&lt;String, Person&gt;) {
+        self.staff = staff
+    }
+    
+    func ageOf(name: String) throws -&gt; Int {
+        guard staff.count &gt; 1 else {
+            throw customError.noPersons
+        }
+        
+        guard let person = self.staff[name] else {
+            throw customError.noSuchEmployee
+        }
+        return person.age
+    }
+    
+    func incomeOf(name: String) throws -&gt; Double {
+        guard staff.count &gt; 1 else {
+            throw customError.noPersons
+        }
+        
+        guard let person = self.staff[name] else {
+            throw customError.noSuchEmployee
+        }
+        
+        return person.income
+    }
+    
+    deinit {
+        print("deinitializer of Employees")
+    }
+}
+
+
+var teamOfEmployees: Employees? = Employees(staff: staff)
+var second = [
+    "age": nil,
+    "income": nil
+] as [String : Any?]
+print("----------Emloyees----------")
+print(second)
+second["age"] = try? teamOfEmployees!.ageOf(name: "Bob")
+print(second)
+second["age"] = try? teamOfEmployees!.ageOf(name: "John")
+print(second)
+
+do {
+    second["income"] = try teamOfEmployees!.incomeOf(name: "Bob")
+} catch let error {
+    print("Error: \(error)")
+    do {
+        second["income"] = try teamOfEmployees!.incomeOf(name: "John")
+    } catch customError.noPersons {
+        print("noPersons")
+    } catch customError.noSuchEmployee {
+        print("noEmployee")
+    }
+}
+print(second)
+print("----------------------------")
+teamOfEmployees = nil
+print("\n\n")
+
+
+
+
+    //Блок не связан с практическим заданием:
+// Вопрос, связанный с возвратом ф-ции (писал Вам на счет этого в телегу), получилось решить следующим оборазом:
+print("----------Eddition----------")
+func external() -&gt; () -&gt; Void {
+    var i: Int = 0
+    func counter() {
+        i += 1
+        print(i)
+    }
+    return counter
+}
+let a: () -&gt; Void = external() // первый счетчик 
+let b: () -&gt; Void = external() // второй 
+print("a(): ")
+for i in stride(from: 0, to: 4, by: 1) {
+    a()
+}
+print("b(): ")
+b()
+b()
+print("----------------------------")
+</string>
+			<key>ModifiedRange</key>
+			<string>{0, 3877}</string>
+			<key>OriginalContent</key>
+			<string>
+</string>
+			<key>OriginalRange</key>
+			<string>{0, 1}</string>
+		</dict>
+	</array>
+	<key>File</key>
+	<string>Chapters/Chapter1.playgroundchapter/Pages/My Playground.playgroundpage/main.swift</string>
+</dict>
+</plist>
